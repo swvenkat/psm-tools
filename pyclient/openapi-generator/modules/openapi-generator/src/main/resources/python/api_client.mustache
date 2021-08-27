@@ -227,7 +227,13 @@ class ApiClient(object):
             {{#tornado}}
             raise tornado.gen.Return(return_data)
             {{/tornado}}
-            return return_data
+
+        try:
+            json_response = json.loads(response_data.data)
+            if "error" in json_response:
+                raise Exception(json_response["error"]["http_code"], json_response["error"]["http_status"], json_response["error"]["message"])
+        except:
+            pass
 
         # for objstore file download
         if len(response_type):
