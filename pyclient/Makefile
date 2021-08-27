@@ -23,13 +23,6 @@ build-generator:
 	mkdir -p bin
 	mv openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar bin/openapi-generator-cli.jar
 
-custom-build-generator:
-	cd openapi-generator/modules/openapi-generator-core && mvn clean install -DskipTests
-	cd openapi-generator/modules/openapi-generator && mvn clean install -DskipTests
-	cd openapi-generator/modules/openapi-generator-cli && mvn clean install -DskipTests
-	mkdir -p bin
-	mv openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar bin/openapi-generator-cli.jar
-
 tests:
 	cd utils && python3 test_apps.py
 
