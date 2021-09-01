@@ -4,6 +4,7 @@ PYCLIENT_CONTAINER ?= pyclient:0.3
 
 default:
 	make getswagger
+	make genconfig
 	make genclient
 
 e2e:
@@ -14,6 +15,9 @@ e2e:
 
 getswagger:
 	python3 getswagger.py
+
+genconfig:
+	bash mkgenconfig.sh
 
 genclient:
 	bash gen.sh
