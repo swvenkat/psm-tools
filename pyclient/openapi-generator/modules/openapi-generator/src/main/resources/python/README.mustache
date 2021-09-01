@@ -1,4 +1,4 @@
-# {{{projectName}}}
+# {{{libName}}}
 {{#appDescriptionWithNewLines}}
 {{{appDescriptionWithNewLines}}}
 {{/appDescriptionWithNewLines}}
@@ -22,16 +22,22 @@ Python >= 3.6
 ## Installation & Usage
 ### pip install
 
-If the python package is hosted on a repository, you can install directly using:
+To install from `PyPi`, you can install using:
 
 ```sh
-pip install git+https://{{gitHost}}/{{{gitUserId}}}/{{{gitRepoId}}}.git
+pip install {{{libName}}}
+```
+
+To install from the source repository, you can install directly using:
+
+```sh
+pip install git+https://pensando/pypi.git
 ```
 (you may need to run `pip` with root permission: `sudo pip install git+https://{{gitHost}}/{{{gitUserId}}}/{{{gitRepoId}}}.git`)
 
 Then import the package:
 ```python
-import {{{packageName}}}
+import {{{libName}}}
 ```
 
 ### Setuptools
@@ -45,11 +51,15 @@ python setup.py install --user
 
 Then import the package:
 ```python
-import {{{packageName}}}
+import {{{libName}}}
 ```
 
 ## Getting Started
 
-Please follow the [installation procedure](#installation--usage) and then run the following:
+For top-level README's for each PSM group, please see the following:
 
-{{> README_common }}
+{{#allgroups}}
+[{{.}} README]({{packageName}}/docs/{{.}}/README.md)
+
+{{/allgroups}}
+

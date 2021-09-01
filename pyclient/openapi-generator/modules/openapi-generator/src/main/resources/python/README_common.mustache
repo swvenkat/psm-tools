@@ -1,53 +1,28 @@
-```python
-{{#apiInfo}}{{#apis}}{{#-last}}{{#hasHttpSignatureMethods}}import datetime{{/hasHttpSignatureMethods}}{{/-last}}{{/apis}}{{/apiInfo}}
-import time
-import {{{packageName}}}
-from pprint import pprint
-{{#apiInfo}}
-{{#apis}}
-{{#-first}}
-from {{apiPackage}} import {{classVarName}}
-{{#imports}}
-{{{import}}}
-{{/imports}}
-{{#operations}}
-{{#operation}}
-{{#-first}}
-{{> python_doc_auth_partial}}
+# {{group}}
 
-# Enter a context with an instance of the API client
-with {{{packageName}}}.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = {{classVarName}}.{{{classname}}}(api_client)
-    {{#allParams}}{{paramName}} = {{{example}}} # {{{dataType}}} | {{{description}}}{{^required}} (optional){{/required}}{{#defaultValue}} (default to {{{.}}}){{/defaultValue}}
-    {{/allParams}}
+This page provides working code examples for the **{{group}}** group.
 
-    try:
-    {{#summary}}    # {{{.}}}
-    {{/summary}}    {{#returnType}}api_response = {{/returnType}}api_instance.{{{operationId}}}({{#allParams}}{{#required}}{{paramName}}{{/required}}{{^required}}{{paramName}}={{paramName}}{{/required}}{{^-last}}, {{/-last}}{{/allParams}}){{#returnType}}
-        pprint(api_response){{/returnType}}
-    except {{{packageName}}}.ApiException as e:
-        print("Exception when calling {{classname}}->{{operationId}}: %s\n" % e)
-{{/-first}}
-{{/operation}}
-{{/operations}}
-{{/-first}}
-{{/apis}}
-{{/apiInfo}}
-```
+Please see each listed method (i.e API Endpoints) for working code examples.
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *{{basePath}}*
+All URIs are relative to `https://PSM-IP/`
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-{{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}*{{classname}}* | [**{{operationId}}**]({{apiDocPath}}{{classname}}.md#{{operationIdLowerCase}}) | **{{httpMethod}}** {{path}} | {{#summary}}{{summary}}{{/summary}}
+{{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}*{{classname}}* | [**{{operationId}}**](../../../{{apiDocPath}}{{classname}}.md#{{operationIdLowerCase}}) | **{{httpMethod}}** {{path}} | {{#summary}}{{summary}}{{/summary}}
 {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}
+
+## README links for Model Groups
+
+{{#allgroups}}
+[{{.}} README.md](..//{{.}}/README.md)
+
+{{/allgroups}}
 
 ## Documentation For Models
 
-{{#models}}{{#model}} - [{{{classname}}}]({{modelDocPath}}{{{classname}}}.md)
+{{#models}}{{#model}} - [{{{classname}}}](../../../{{modelDocPath}}{{{classname}}}.md)
 {{/model}}{{/models}}
 
 ## Documentation For Authorization
