@@ -48,6 +48,17 @@ docker build . -t pyclient:0.1
 * Running python code natively (not in docker container)
 You'll need to install python3, pip, java and maven as documented in the Dockerfile, and set $PYTHONPATH 
 
+* Generating Python code for PyPi Repo
+
+By default, Python code is generated in the local directory.
+
+To build elsewhere, please set the TARGETDIR in the `make` command.   
+For example, building Python code for all 3 pipelines (dss, cloud, ent), run:
+
+```
+TARGETDIR=/home/pypigenrepo make
+```
+
 ## Contributor's Guide
 Contributors are welcome. Please follow the following guidelines to contrbute to this repo
 * Please follow [this git workflow](./docs/git-workflow.md) to submit a pull-request

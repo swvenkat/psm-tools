@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import json
 import requests
 import re
@@ -12,10 +13,11 @@ HOME = os.environ["HOME"]
 psm_config_path = HOME+"/.psm/config.json"
 psm_config = {}
 
-def downloadSwaggerFiles():
+def downloadSwaggerFiles(target):
     host = psm_config["psm-ip"]
-    if not os.path.exists("swagger"):
-        os.mkdir("swagger")
+    dirname = "swagger_" + target    
+    if not os.path.exists(dirname):
+        os.mkdir(dirname)
 
     response = requests.get("https://"+host+"/docs/generated/swaggeruri.html", verify=False)
     matches = re.findall("href=\"([^\"]*)", response.text)
@@ -24,7 +26,7 @@ def downloadSwaggerFiles():
         resp = requests.get("https://"+host+match, verify=False)
         filename = match.replace("/swagger/", "")
         jsondata = processSwagger(filename, resp.json())
-        with open("swagger/"+filename+".json", "w") as f:
+        with open(dirname + "/" + filename + ".json", "w") as f:
             json.dump(jsondata, f, indent=4)
 
 def removeRequired(filename, jsondata):
@@ -63,6 +65,12 @@ def processSwagger(filename, jsondata):
     
     return jsondata
 
+def usage():
+    print ("Usage: getswagger.py [dss|cloud|ent]")
+    sys.exit(1)
+
 if __name__ == "__main__":
+    if ((len(sys.argv) != 2) or (sys.argv[1] not in "dss cloud ent")):
+        usage()
     psm_config = get_psm_config()
-    downloadSwaggerFiles()
+    downloadSwaggerFiles(sys.argv[1])

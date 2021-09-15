@@ -4,3 +4,15 @@ psmapi/
 swagger/
 *__pycache__*
 bin/
+gen_cloud.sh
+gen_dss.sh
+gen_ent.sh
+genconfig_cloud.json
+genconfig_dss.json
+genconfig_ent.json
+src_cloud/
+src_dss/
+src_ent/
+swagger_cloud/
+swagger_dss/
+swagger_ent/
