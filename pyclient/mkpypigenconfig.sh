@@ -62,6 +62,7 @@ EOF
 
 function mkpypimeta() {
 
+mkdir -p ${destdir}/${src_dirname}
 cat <<EOF > ${destdir}/${src_dirname}/pyproject.toml
 [build-system]
 requires = [
