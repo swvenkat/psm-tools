@@ -1,12 +1,14 @@
 import os
-from apigroups.client.apis import WorkloadV1Api
-from utils.workload_utils import getDscFromWorkload
-import logging
-import sys
-import json
-import warnings
-from apigroups.client import configuration, api_client
 
+import import_lib
+pensando_lib = import_lib.import_lib()
+import pensando_lib
+from pensando_lib.psm import configuration, api_client
+from pensando_lib.psm.apis import WorkloadV1Api
+
+from workload_utils import getDscFromWorkload
+
+import warnings
 warnings.simplefilter("ignore")
 
 HOME = os.environ['HOME']
@@ -23,7 +25,10 @@ workload_instance = WorkloadV1Api(client)
 workload_response = workload_instance.list_workload("default")
 
 #an existing workload
-print(getDscFromWorkload(client, "default" , workload_response.items[0]["meta"]["name"]))
+try:
+    print(getDscFromWorkload(client, "default" , workload_response.items[0]["meta"]["name"], workload_instance))
+except IndexError:
+    print("No workloads found. Skipping test case")
 
 #an invalid workload name
 name = "invalidworkloadname"
@@ -35,11 +40,11 @@ while(nameisdif):
             oldname = name
             name += "1"
     nameisdif == (oldname == name)
-print(getDscFromWorkload(client, "default" , name))
+print(getDscFromWorkload(client, "default", name, workload_instance))
 
 #an invalid workload IP
 IP = "0.0.0.0"
-print(getDscFromWorkload(client, "default" , IP))
+print(getDscFromWorkload(client, "default" , IP, workload_instance))
 
 #an invalid workload IP thats forced into name
-print(getDscFromWorkload(client, "default" , "0.0.0.0", forceName=True))
+print(getDscFromWorkload(client, "default" , "0.0.0.0", workload_instance, forceName=True))

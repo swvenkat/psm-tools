@@ -19,6 +19,7 @@ pypi_%: genconfig_%
 	$(eval TGT := $(shell echo $@ | sed 's/.*_//'))
 	@echo Making $(TGT)
 	bash gen_$(TGT).sh
+	bash postprocess.sh $(TGT) $(TARGETDIR)
 
 e2e:
 	make getswagger
@@ -32,7 +33,7 @@ build-generator:
 	mv openapi-generator/modules/openapi-generator-cli/target/openapi-generator-cli.jar bin/openapi-generator-cli.jar
 
 tests:
-	cd utils && python3 test_apps.py
+	python3 test_apps.py
 
 clean:
 	if [ -d "./apigroups" ] ; then find ./apigroups -mindepth 1 ! -regex '^./apigroups/test/.*' -delete ; fi

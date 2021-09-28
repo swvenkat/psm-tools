@@ -4,11 +4,14 @@ import os
 import sys
 import argparse
 import warnings
-from apigroups.client.apis import SecurityV1Api
-from apigroups.client import configuration, api_client
-from apigroups.client.models import ApiObjectMeta, SecurityNetworkSecurityPolicySpec, SecurityNetworkSecurityPolicy
-from apigroups.client.models import SecuritySGRule
-from apigroups.client.models import SecurityProtoPort
+
+from utils.helper import import_lib
+pensando_lib = import_lib()
+from pensando_lib.psm.apis import SecurityV1Api
+from pensando_lib.psm import configuration, api_client
+from pensando_lib.psm.models import ApiObjectMeta, SecurityNetworkSecurityPolicySpec, SecurityNetworkSecurityPolicy
+from pensando_lib.psm.models import SecuritySGRule
+from pensando_lib.psm.models import SecurityProtoPort
 from utils.rule_utils import protoPortRead
 from utils.rule_utils import protoPortValid
 from utils.error_utils import handleErrorResponse

@@ -2,15 +2,19 @@
 
 import os
 from typing import ItemsView
-from apigroups.client.apis import FwlogV1Api, WorkloadV1Api
-from apigroups.client import configuration, api_client
+
+from utils.helper import import_lib
+pensando_lib = import_lib()
+from pensando_lib.psm.apis import FwlogV1Api, WorkloadV1Api
+from pensando_lib.psm import configuration, api_client
+from pensando_lib.psm.models import FwlogFwLogQuery
 from utils.datatime_utils import time_delta_from_now
+
 from tabulate import tabulate
 import logging 
 import sys
 import datetime
 from datetime import timezone
-from apigroups.client.models import FwlogFwLogQuery
 import argparse
 import warnings
 

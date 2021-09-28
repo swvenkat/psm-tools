@@ -1,4 +1,3 @@
-import sys
 # Function to seperate protocol from port in port input
 def protoPortRead(port):
     protocol = ""

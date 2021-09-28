@@ -1,10 +1,7 @@
-import os
-from utils.net_utils import isIPv4
-import logging
-import sys
-import json
-import warnings
-from apigroups.client import configuration, api_client
+try:
+    from .net_utils import isIPv4
+except:
+    from net_utils import isIPv4
 
 #valid IPv4 address
 print(isIPv4("23.30.4.9"))

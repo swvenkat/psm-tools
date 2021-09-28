@@ -1,12 +1,9 @@
-import os
-from apigroups.client.apis import WorkloadV1Api
-from utils.net_utils import isIPv4
-import logging
-import sys
-import json
-import warnings
+try:
+    from .net_utils import isIPv4
+except:
+    from net_utils import isIPv4
 
-def getDscFromWorkload(client, tenant,  workload, forceName=False):
+def getDscFromWorkload(client, tenant, workload, workload_api_instance, forceName=False):
     '''
     This will get a specific DSC id from a workload. The workload can be identified in two ways, via the workload name or the uuid of the workload. 
 
@@ -27,9 +24,8 @@ def getDscFromWorkload(client, tenant,  workload, forceName=False):
     '''
     These are the api calls that this function will perform, to be used later in the code
     '''
-    workload_instance = WorkloadV1Api(client)
-    workload_response = workload_instance.list_workload(tenant)
-    endpoint_response = workload_instance.list_endpoint(tenant)
+    workload_response = workload_api_instance.list_workload(tenant)
+    endpoint_response = workload_api_instance.list_endpoint(tenant)
     
 
     '''
@@ -53,7 +49,7 @@ def getDscFromWorkload(client, tenant,  workload, forceName=False):
         for work in workload_response.items:
             for interface in work.status.interfaces:
                 if ("ip-addresses" in interface):
-                    for ip in interface.ip-addresses:
+                    for ip in interface.ip_addresses:
                         if (ip == workload):
                             endpoint_list.append(interface.endpoint)
     if (len(endpoint_list) == 0):

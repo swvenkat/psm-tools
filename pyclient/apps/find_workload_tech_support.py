@@ -3,15 +3,19 @@
 import time
 import os
 import argparse 
-from apigroups.client import configuration, api_client
-from utils import workload_tools
-from apigroups.client.api.monitoring_v1_api import MonitoringV1Api
-from apigroups.client.api.cluster_v1_api import ClusterV1Api
-from apigroups.client.api.objstore_v1_api import ObjstoreV1Api
-from apigroups.client.model.monitoring_tech_support_request import MonitoringTechSupportRequest
-from apigroups.client.model.api_object_meta import ApiObjectMeta
-from apigroups.client.model.monitoring_tech_support_request_spec import MonitoringTechSupportRequestSpec
-from apigroups.client.model.tech_support_request_spec_node_selector_spec import TechSupportRequestSpecNodeSelectorSpec
+
+from utils.helper import import_lib
+pensando_lib = import_lib()
+from pensando_lib.psm import configuration, api_client
+from pensando_lib.psm.api.monitoring_v1_api import MonitoringV1Api
+from pensando_lib.psm.api.cluster_v1_api import ClusterV1Api
+from pensando_lib.psm.api.objstore_v1_api import ObjstoreV1Api
+from pensando_lib.psm.model.monitoring_tech_support_request import MonitoringTechSupportRequest
+from pensando_lib.psm.model.api_object_meta import ApiObjectMeta
+from pensando_lib.psm.model.monitoring_tech_support_request_spec import MonitoringTechSupportRequestSpec
+from pensando_lib.psm.model.tech_support_request_spec_node_selector_spec import TechSupportRequestSpecNodeSelectorSpec
+
+from utils.workload_utils import getDscFromWorkload
 from utils.filesystem_utils import saveBinary
 import warnings
 
@@ -50,7 +54,7 @@ node_names = set()
 
 for workload in workload_list:
     #get DSC IDs from the getDscFromWorkload API using the given workloads by user 
-    dsc_id_list = workload_tools.getDscFromWorkload(client, workload, forceName = True)
+    dsc_id_list = getDscFromWorkload(client, workload, forceName = True)
 
     #find DSC name via DSC ID and store it in the node_names set, any duplicate dscs will not be added
     if len(dsc_id_list) == 0:

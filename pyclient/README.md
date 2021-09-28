@@ -53,7 +53,7 @@ You'll need to install python3, pip, java and maven as documented in the Dockerf
 By default, Python code is generated in the local directory.
 
 To build elsewhere, please set the TARGETDIR in the `make` command.   
-For example, building Python code for all 3 pipelines (dss, cloud, ent), run:
+For example, building Python code for all 3 pipelines (cloud, ent), run:
 
 ```
 TARGETDIR=/home/pypigenrepo make

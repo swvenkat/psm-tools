@@ -55,6 +55,8 @@ public class PythonClientCodegen extends PythonLegacyClientCodegen {
     private DateTimeFormatter iso8601Date = DateTimeFormatter.ISO_DATE;
     private DateTimeFormatter iso8601DateTime = DateTimeFormatter.ISO_DATE_TIME;
 
+    protected String libAlias = "";
+
     public PythonClientCodegen() {
         super();
 
@@ -136,6 +138,11 @@ public class PythonClientCodegen extends PythonLegacyClientCodegen {
         supportingFiles.add(new SupportingFile("README_common.mustache", packagePath() + File.separatorChar + "docs/"+group(), "README.md"));
 
         supportingFiles.add(new SupportingFile("__init__apis.mustache", packagePath() + File.separatorChar + "apis/", "__init__.py"));
+
+        if (additionalProperties.containsKey("libAlias")) {
+            this.setlibAlias((String) additionalProperties.get("libAlias"));
+        }
+
         // Generate the 'signing.py' module, but only if the 'HTTP signature' security scheme is specified in the OAS.
         Map<String, SecurityScheme> securitySchemeMap = openAPI != null ?
                 (openAPI.getComponents() != null ? openAPI.getComponents().getSecuritySchemes() : null) : null;
@@ -174,6 +181,14 @@ public class PythonClientCodegen extends PythonLegacyClientCodegen {
     @Override
     public String getName() {
         return "python";
+    }
+
+    public String libAlias() {
+        return libAlias;
+    }
+
+    public void setlibAlias(String libAlias) {
+        this.libAlias = libAlias;
     }
 
     @Override
@@ -319,6 +334,10 @@ public class PythonClientCodegen extends PythonLegacyClientCodegen {
             }
         }
         return defaultValue;
+    }
+
+    public String packageName() {
+        return this.packageName;
     }
 
     @Override

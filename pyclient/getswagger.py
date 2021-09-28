@@ -5,7 +5,7 @@ import re
 import os
 import sys
 import logging
-from utils import get_psm_config
+from login import get_psm_config
 import warnings
 warnings.simplefilter("ignore")
 
@@ -66,11 +66,11 @@ def processSwagger(filename, jsondata):
     return jsondata
 
 def usage():
-    print ("Usage: getswagger.py [dss|cloud|ent]")
+    print ("Usage: getswagger.py [cloud|ent]")
     sys.exit(1)
 
 if __name__ == "__main__":
-    if ((len(sys.argv) != 2) or (sys.argv[1] not in "dss cloud ent")):
+    if ((len(sys.argv) != 2) or (sys.argv[1] not in "cloud ent")):
         usage()
     psm_config = get_psm_config()
     downloadSwaggerFiles(sys.argv[1])

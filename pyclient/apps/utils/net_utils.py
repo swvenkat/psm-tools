@@ -1,5 +1,3 @@
-
-
 def isIPv4(address):
     '''
     This code will check if the string is a valid IPv4 address

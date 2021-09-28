@@ -2,11 +2,12 @@ import subprocess as sp
 import os
 
 print("Testing apps:\n")
-apps_directory = "../apps/"
+apps_directory = "apps/"
 index = 0
 success = 0
 
 apps_to_test = ["cluster_ping.py"]
+exclude = ["find_workload.py", "fwlogs.py", "rule_poke.py", "find_rule.py", "find_workload_tech_support.py", "identify_dsc.py", "rule.py"]
 
 for app in os.listdir(apps_directory):
     if app.endswith(".py") and app in apps_to_test:

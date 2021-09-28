@@ -2,8 +2,12 @@
 
 import os
 from typing import ItemsView
-from apigroups.client.apis import WorkloadV1Api
-from apigroups.client import configuration, api_client
+
+from utils.helper import import_lib
+pensando_lib = import_lib()
+from pensando_lib.psm.apis import WorkloadV1Api
+from pensando_lib.psm import configuration, api_client
+
 from tabulate import tabulate
 import argparse
 from datetime import timezone

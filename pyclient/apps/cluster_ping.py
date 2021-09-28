@@ -1,8 +1,12 @@
 #!/usr/bin/python3
 
 import os
-from apigroups.client.apis import ClusterV1Api
-from apigroups.client import configuration, api_client
+
+from utils.helper import import_lib
+pensando_lib = import_lib()
+from pensando_lib.psm.apis import ClusterV1Api
+from pensando_lib.psm import configuration, api_client
+
 import warnings
 warnings.simplefilter("ignore")
 

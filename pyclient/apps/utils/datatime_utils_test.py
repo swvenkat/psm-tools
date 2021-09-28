@@ -1,20 +1,9 @@
-import os
-from utils.datatime_utils import time_delta_from_now
+from datatime_utils import time_delta_from_now
 from datetime import timezone
 import datetime
 import warnings
-from apigroups.client import configuration, api_client
 
 warnings.simplefilter("ignore")
-
-HOME = os.environ['HOME']
-
-cfg = configuration.Configuration(
-    psm_config_path=HOME+"/.psm/config.json",
-    interactive_mode=True
-)
-cfg.verify_ssl = False
-client = api_client.ApiClient(cfg)
 
 current_time = datetime.datetime.now(timezone.utc)
 

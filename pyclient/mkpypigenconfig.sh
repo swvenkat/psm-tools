@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function usage() {
-   echo "Usage: $0 [dss|cloud|ent] targetdir" 
+   echo "Usage: $0 [cloud|ent] targetdir" 
    exit 1
 }
 
@@ -28,7 +28,10 @@ echo Creating genconfig_$1.json ...
 cat <<EOF > genconfig_$1.json
 {
     "libName": "pensando_$1",
-    "packageName": "psm_$1",
+    "libAlias": "pensando_psm",
+    "generatorName": "python",
+    "templateDir": "templates/",
+    "packageName": "psm",
     "modelPackage": "model",
     "apiPackage": "api",
     "allgroups" : `mkallgroups $1`
@@ -50,7 +53,7 @@ do
   group=\`basename \${file} | sed -e 's/.json//'\`
   dir=\`cat genconfig_${1}.json | jq .libName | tr -d "\""\`
 
-  java -jar bin/openapi-generator-cli.jar generate -t ./templates -i "\$file" -p group=\$group -c genconfig_${1}.json -g python -o ${dirname}/ -t openapi-generator/modules/openapi-generator/src/main/resources/python
+  java -jar bin/openapi-generator-cli.jar generate -i "\$file" -p group=\$group -c genconfig_${1}.json -o ${dirname}/
 
   echo "\$group"
 done
@@ -58,7 +61,6 @@ done
 EOF
 
 }
-
 
 function mkpypimeta() {
 
@@ -110,14 +112,13 @@ EOF
 
 [ $# -eq 2 ] || usage
 
-echo $1 | egrep 'dss|cloud|ent' > /dev/null || usage
+echo $1 | egrep 'cloud|ent' > /dev/null || usage
 pipeline=$1
 src_dirname=src_${1}
 destdir=$2
 
-
 mkgenconfig $pipeline 
-mkgensh $pipeline 
+mkgensh $pipeline
 mkpypimeta $pipeline 
 
 exit 0

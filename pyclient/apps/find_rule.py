@@ -4,9 +4,12 @@ import os
 import sys
 import argparse
 import warnings
-from apigroups.client.apis import WorkloadV1Api
-from apigroups.client.apis import SecurityV1Api
-from apigroups.client import configuration, api_client
+
+from utils.helper import import_lib
+pensando_lib = import_lib()
+from pensando_lib.psm.apis import WorkloadV1Api
+from pensando_lib.psm.apis import SecurityV1Api
+from pensando_lib.psm import configuration, api_client
 from ipaddress import ip_network
 
 
@@ -47,16 +50,16 @@ parser.add_argument('--workload_name', type=str, required = False, help = "Name 
 parser.add_argument('--ip', type=str, required = False, help = "Ip address")
 args = parser.parse_args()
 
-if (args.workload_name and args.ip):
+if (args.workload_name != None and args.ip != None):
     sys.exit("Please only provide one parameter, the workload name or an ip address")
 
-if (not args.workload_name and not args.ip):
+if (args.workload_name == None and args.ip == None):
     sys.exit("Please provide either a workload name or an ip address")
 
 policy_list = security_instance.list_network_security_policy(setDefault)
 policiesInRange = []
 
-if (args.workload_name):
+if (args.workload_name != None):
     try:
         workload = workload_instance.get_workload(setDefault, args.workload_name)
     except Exception as ex:

@@ -1,16 +1,19 @@
 #!/usr/bin/python3
 
 import os
-from apigroups.client.apis import ClusterV1Api, TelemetryQueryV1Api, WorkloadV1Api, NetworkV1Api, SearchV1Api
-from apigroups.client import configuration, api_client
+
+from utils.helper import import_lib
+pensando_lib = import_lib()
+from pensando_lib.psm.apis import ClusterV1Api, TelemetryQueryV1Api, WorkloadV1Api, NetworkV1Api, SearchV1Api
+from pensando_lib.psm.model.telemetry_query_metrics_query_spec import TelemetryQueryMetricsQuerySpec
+from pensando_lib.psm.model.telemetry_query_metrics_query_list import TelemetryQueryMetricsQueryList
+from pensando_lib.psm import configuration, api_client
+
 import warnings
-from utils import *
 from utils.workload_utils import getDscFromWorkload 
 import sys
 import json
 import argparse
-from apigroups.client.model.telemetry_query_metrics_query_spec import TelemetryQueryMetricsQuerySpec
-from apigroups.client.model.telemetry_query_metrics_query_list import TelemetryQueryMetricsQueryList
 warnings.simplefilter("ignore")
 
 
