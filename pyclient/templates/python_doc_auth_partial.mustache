@@ -1,7 +1,7 @@
 # Defining the host is optional and defaults to {{{basePath}}}
 # See configuration.py for a list of all supported configuration parameters.
 configuration = {{libName}}.{{{packageName}}}.Configuration(
-    psm_config_path=HOME+"/.psm/config.json"
+    psm_config_path = os.environ["HOME"] + "/.psm/config.json"
 )
 configuration.verify_ssl = False
 

@@ -670,18 +670,17 @@ conf = {{{packageName}}}.Configuration(
     
     def login(self):
         loginpath = self._base_path+"/v1/login"
-        creds_set = 'PSM_USER' not in os.environ or 'PSM_PASSWORD' not in os.environ
-        
-        if creds_set:
+        creds_not_set = 'PSM_USER' not in os.environ or 'PSM_PASSWORD' not in os.environ
+        if creds_not_set:
             if self.interactive_mode:
                 username = input("Username: ")
                 password = getpass.getpass()
             else:
-                username = os.environ['PSM_USER']
-                password = os.environ['PSM_PASSWORD']
+                logging.error("PSM_USER and PSM_PASSWORD not set in environment variables.")
+                sys.exit(1)
         else:
-            logging.error("PSM_USER and PSM_PASSWORD not set in environment variables.")
-            sys.exit(1)
+            username = os.environ['PSM_USER']
+            password = os.environ['PSM_PASSWORD']
 
         data = {'username': username, 'password': password, 'tenant': 'default'}
         response = requests.post(loginpath, data=json.dumps(data), verify=False)

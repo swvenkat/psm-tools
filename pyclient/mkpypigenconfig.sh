@@ -34,6 +34,7 @@ cat <<EOF > genconfig_$1.json
     "packageName": "psm",
     "modelPackage": "model",
     "apiPackage": "api",
+    "pipeline" : "$1",
     "allgroups" : `mkallgroups $1`
  }
 EOF
@@ -77,7 +78,7 @@ EOF
 cat <<EOF > ${destdir}/${src_dirname}/setup.cfg
 [metadata]
 name = pensando_${1}
-version = 0.0.1
+version = 0.0.2
 author = Jeff Silberman
 author_email = jeff@pensando.io
 description = Python language bindings for Pensando ${1}
@@ -85,7 +86,7 @@ long_description = file: README.md
 long_description_content_type = text/markdown
 url = https://github.com/pensando/pypi
 project_urls =
-    Bug Tracker = https://github.com/pensando/pypi/issues
+    Bug Tracker = https://github.com/pensando/psm-tools/issues
 classifiers =
     Programming Language :: Python :: 3
     License :: OSI Approved :: MIT License

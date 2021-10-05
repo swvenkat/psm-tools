@@ -1,19 +1,20 @@
+Ensure that `PSM_USER` and `PSM_PASSWORD` are set in your environment
+
 ```python
 import time
-import {{{packageName}}}
-from {{apiPackage}} import {{classVarName}}
+import os
+import {{libName}}
+import {{libName}}.{{{packageName}}}
+from {{libName}}.{{packageName}}.{{apiPackage}} import {{classVarName}}
+from {{libName}}.{{packageName}}.models.{{group}} import *
 {{#imports}}
 {{{.}}}
 {{/imports}}
 from pprint import pprint
+from dateutil.parser import parse as dateutil_parser
 {{> python_doc_auth_partial}}
 # Enter a context with an instance of the API client
-{{#hasAuthMethods}}
-with {{{packageName}}}.ApiClient(configuration) as api_client:
-{{/hasAuthMethods}}
-{{^hasAuthMethods}}
-with {{{packageName}}}.ApiClient() as api_client:
-{{/hasAuthMethods}}
+with {{libName}}.{{{packageName}}}.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = {{classVarName}}.{{{classname}}}(api_client)
 {{#requiredParams}}
@@ -24,8 +25,6 @@ with {{{packageName}}}.ApiClient() as api_client:
 {{#optionalParams}}
     {{paramName}} = {{{example}}} # {{{dataType}}} | {{{description}}}{{^required}} (optional){{/required}}{{#defaultValue}} if omitted the server will use the default value of {{{defaultValue}}}{{/defaultValue}}
 {{/optionalParams}}
-{{#requiredParams}}
-{{#-last}}
 
     # example passing only required values which don't have defaults set
     try:
@@ -36,41 +35,7 @@ with {{{packageName}}}.ApiClient() as api_client:
 {{#returnType}}
         pprint(api_response)
 {{/returnType}}
-    except {{{packageName}}}.ApiException as e:
+    except {{libName}}.{{{packageName}}}.ApiException as e:
         print("Exception when calling {{classname}}->{{operationId}}: %s\n" % e)
-{{/-last}}
-{{/requiredParams}}
-{{#optionalParams}}
-{{#-last}}
 
-    # example passing only required values which don't have defaults set
-    # and optional values
-    try:
-{{#summary}}
-        # {{{.}}}
-{{/summary}}
-        {{#returnType}}api_response = {{/returnType}}api_instance.{{{operationId}}}({{#requiredParams}}{{^defaultValue}}{{paramName}}, {{/defaultValue}}{{/requiredParams}}{{#optionalParams}}{{paramName}}={{paramName}}{{^-last}}, {{/-last}}{{/optionalParams}})
-{{#returnType}}
-        pprint(api_response)
-{{/returnType}}
-    except {{{packageName}}}.ApiException as e:
-        print("Exception when calling {{classname}}->{{operationId}}: %s\n" % e)
-{{/-last}}
-{{/optionalParams}}
-{{^requiredParams}}
-{{^optionalParams}}
-
-    # example, this endpoint has no required or optional parameters
-    try:
-{{#summary}}
-        # {{{.}}}
-{{/summary}}
-        {{#returnType}}api_response = {{/returnType}}api_instance.{{{operationId}}}()
-{{#returnType}}
-        pprint(api_response)
-{{/returnType}}
-    except {{{packageName}}}.ApiException as e:
-        print("Exception when calling {{classname}}->{{operationId}}: %s\n" % e)
-{{/optionalParams}}
-{{/requiredParams}}
 ```

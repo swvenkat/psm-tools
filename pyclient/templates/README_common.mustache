@@ -1,48 +1,11 @@
-```python
-{{#apiInfo}}{{#apis}}{{#-last}}{{#hasHttpSignatureMethods}}import datetime{{/hasHttpSignatureMethods}}{{/-last}}{{/apis}}{{/apiInfo}}
-import time
-import {{{packageName}}}
-from pprint import pprint
-{{#apiInfo}}
-{{#apis}}
-{{#-first}}
-from {{apiPackage}} import {{classVarName}}
-{{#imports}}
-{{{import}}}
-{{/imports}}
-{{#operations}}
-{{#operation}}
-{{#-first}}
-{{> python_doc_auth_partial}}
-
-# Enter a context with an instance of the API client
-with {{{packageName}}}.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = {{classVarName}}.{{{classname}}}(api_client)
-    {{#allParams}}{{paramName}} = {{{example}}} # {{{dataType}}} | {{{description}}}{{^required}} (optional){{/required}}{{#defaultValue}} (default to {{{.}}}){{/defaultValue}}
-    {{/allParams}}
-
-    try:
-    {{#summary}}    # {{{.}}}
-    {{/summary}}    {{#returnType}}api_response = {{/returnType}}api_instance.{{{operationId}}}({{#allParams}}{{#required}}{{paramName}}{{/required}}{{^required}}{{paramName}}={{paramName}}{{/required}}{{^-last}}, {{/-last}}{{/allParams}}){{#returnType}}
-        pprint(api_response){{/returnType}}
-    except {{{packageName}}}.ApiException as e:
-        print("Exception when calling {{classname}}->{{operationId}}: %s\n" % e)
-{{/-first}}
-{{/operation}}
-{{/operations}}
-{{/-first}}
-{{/apis}}
-{{/apiInfo}}
-```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *{{basePath}}*
+All URIs are relative to *https://PSM-IP-addr*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-{{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}*{{classname}}* | [**{{operationId}}**]({{apiDocPath}}{{classname}}.md#{{operationIdLowerCase}}) | **{{httpMethod}}** {{path}} | {{#summary}}{{summary}}{{/summary}}
+{{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}*{{classname}}* | [**{{operationId}}**](../../../../{{libName}}/{{apiDocPath}}{{classname}}.md#{{operationIdLowerCase}}) | **{{httpMethod}}** {{path}} | {{#summary}}{{summary}}{{/summary}}
 {{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}
 
 ## Documentation For Models

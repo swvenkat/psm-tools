@@ -14,3 +14,4 @@ pipeline=$1
 destdir=$2
 
 cplogin $pipeline
+rm -r $destdir/src_$1/pensando_$1/.openapi-generator

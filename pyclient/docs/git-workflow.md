@@ -77,13 +77,13 @@ $ git push
 # this would re-trigger the sanity run, and let you know if there was a failure
 ```
 
-### How to rebase with master and resubmit
+### How to rebase with main and resubmit
 
-1. Fetch master and Rebase
+1. Fetch main and Rebase
 ```
 # from any branch (note that each branch is independent of each other and also your master)
-$ git fetch upstream master
-$ git rebase upstream/master
+$ git fetch upstream main
+$ git rebase upstream/main
 <may have conflicts, resolve them as follows>
    $ git add .
    $ git rebase --continue
