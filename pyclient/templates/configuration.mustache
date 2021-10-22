@@ -182,6 +182,7 @@ conf = {{{packageName}}}.Configuration(
                  server_index=None, server_variables=None,
                  server_operation_index=None, server_operation_variables=None,
                  ssl_ca_cert=None, debugMode=False, interactive_mode=False,
+                 psm_basic_auth=False,
                  ):
         """Constructor
         """
@@ -189,24 +190,32 @@ conf = {{{packageName}}}.Configuration(
         self.interactive_mode = False
         if interactive_mode:
             self.interactive_mode = True
+        self.psm_basic_auth = False
+        if psm_basic_auth:
+            self.psm_basic_auth = True
 
         self.cookie = None
-        self.psm_config_path = psm_config_path
-        self.psm_config = get_psm_config()
-        if "psm-ip" not in self.psm_config:
-            logging.error("'psm-ip' not set in PSM config file.")
-            if self.interactive_mode:
-                self.psm_config = update_psm_config(this.psm_config)
-        
-        self.debugMode = False
-        if ("debug" in self.psm_config and self.psm_config["debug"] == "true") or debugMode:
-            logging.basicConfig(format='%(levelname)s: %(msg)s', level=logging.DEBUG)
-        
-        host = "https://" + self.psm_config["psm-ip"]
-        self._base_path = self.psm_config["psm-ip"] if host is None else host
-        if "token" in self.psm_config:
-            self.cookie = self.psm_config["token"]
-        else:
+        if not psm_basic_auth:
+            self.psm_config_path = psm_config_path
+            self.psm_config = get_psm_config()
+            if "psm-ip" not in self.psm_config:
+                logging.error("'psm-ip' not set in PSM config file.")
+                if self.interactive_mode:
+                    self.psm_config = update_psm_config(this.psm_config)
+            self.debugMode = False
+            if ("debug" in self.psm_config and self.psm_config["debug"] == "true") or debugMode:
+                logging.basicConfig(format='%(levelname)s: %(msg)s', level=logging.DEBUG)
+            host = "https://" + self.psm_config["psm-ip"]
+            self._base_path = self.psm_config["psm-ip"] if host is None else host
+            if "token" in self.psm_config:
+                self.cookie = self.psm_config["token"]
+            else:
+                self.login()
+        else:                    # psm_basic_auth
+            if "https://" in host:
+                self._base_path = host
+            else:
+                self._base_path = "https://" + host
             self.login()
 
         """Default Base url
@@ -672,7 +681,7 @@ conf = {{{packageName}}}.Configuration(
         loginpath = self._base_path+"/v1/login"
         creds_not_set = 'PSM_USER' not in os.environ or 'PSM_PASSWORD' not in os.environ
         if creds_not_set:
-            if self.interactive_mode:
+            if self.interactive_mode and not self.psm_basic_auth:
                 username = input("Username: ")
                 password = getpass.getpass()
             else:
@@ -688,7 +697,8 @@ conf = {{{packageName}}}.Configuration(
         resp_cookie = response.cookies.items()[0]
         cookie = resp_cookie[0] + "=" + resp_cookie[1]
         self.cookie = cookie
-        psm_config = get_psm_config()
-        psm_config["token"] = self.cookie
-        write_psm_config(self.psm_config_path, psm_config)
-        return cookie
+        if not self.psm_basic_auth:
+            psm_config = get_psm_config()
+            psm_config["token"] = self.cookie
+            write_psm_config(self.psm_config_path, psm_config)
+            return cookie
