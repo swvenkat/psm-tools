@@ -2,10 +2,10 @@
 REGISTRY_URL ?= registry.test.pensando.io:5000
 PYCLIENT_CONTAINER ?= pyclient:0.3
 TARGETDIR ?= `pwd`
-PIPELINES ?= cloud ent
+DISTRIBUTIONS ?= cloud ent dss
 
 default:
-	$(eval TGTS := $(addprefix pypi_,$(PIPELINES)))
+	$(eval TGTS := $(addprefix pypi_,$(DISTRIBUTIONS)))
 	make $(TGTS)
 
 genconfig_%:
@@ -37,7 +37,7 @@ tests:
 
 clean:
 	if [ -d "./apigroups" ] ; then find ./apigroups -mindepth 1 ! -regex '^./apigroups/test/.*' -delete ; fi
-	rm -rf $(addprefix src_,$(PIPELINES))  $(addsuffix .sh, $(addprefix gen_,$(PIPELINES)))  $(addsuffix .json, $(addprefix genconfig_,$(PIPELINES))) swagger_*
+	rm -rf $(addprefix src_,$(DISTRIBUTIONS))  $(addsuffix .sh, $(addprefix gen_,$(DISTRIBUTIONS)))  $(addsuffix .json, $(addprefix genconfig_,$(DISTRIBUTIONS))) swagger_*
 
 run-container:
 	docker run -it -v ~/.psm:/root/.psm -v `pwd`:/pyclient ${REGISTRY_URL}/${PYCLIENT_CONTAINER} /bin/bash

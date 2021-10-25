@@ -66,11 +66,11 @@ def processSwagger(filename, jsondata):
     return jsondata
 
 def usage():
-    print ("Usage: getswagger.py [cloud|ent]")
+    print ("Usage: getswagger.py [cloud|dss|ent]")
     sys.exit(1)
 
 if __name__ == "__main__":
-    if ((len(sys.argv) != 2) or (sys.argv[1] not in "cloud ent")):
+    if ((len(sys.argv) != 2) or (sys.argv[1] not in "cloud dss ent")):
         usage()
     psm_config = get_psm_config()
     downloadSwaggerFiles(sys.argv[1])
