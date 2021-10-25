@@ -93,6 +93,8 @@ classifiers =
     Operating System :: OS Independent
 
 [options]
+install_requires =
+    nulltype
 package_dir =
     = .
 packages = find:
