@@ -182,32 +182,72 @@ conf = {{{packageName}}}.Configuration(
                  server_index=None, server_variables=None,
                  server_operation_index=None, server_operation_variables=None,
                  ssl_ca_cert=None, debugMode=False, interactive_mode=False,
+                 psm_basic_auth=False,
                  ):
         """Constructor
         """
-
-        self.interactive_mode = False
-        if interactive_mode:
-            self.interactive_mode = True
-
         self.cookie = None
-        self.psm_config_path = psm_config_path
-        self.psm_config = get_psm_config()
-        if "psm-ip" not in self.psm_config:
-            logging.error("'psm-ip' not set in PSM config file.")
-            if self.interactive_mode:
-                self.psm_config = update_psm_config(this.psm_config)
-        
-        self.debugMode = False
-        if ("debug" in self.psm_config and self.psm_config["debug"] == "true") or debugMode:
-            logging.basicConfig(format='%(levelname)s: %(msg)s', level=logging.DEBUG)
-        
-        host = "https://" + self.psm_config["psm-ip"]
-        self._base_path = self.psm_config["psm-ip"] if host is None else host
-        if "token" in self.psm_config:
-            self.cookie = self.psm_config["token"]
-        else:
+        self.username = username
+        self.password = password
+
+        # Evaluation Order
+        # If not psm_basic_auth and not psm_config_path
+        #      that's an error
+        # If psm_basic_auth
+        #      Use basic_auth
+        # If not psm_basic_auth and psm_config_path
+        #      try to use token and ip
+        #      else if interactive mode
+        #         try to login
+        #      else
+        #         that's an error
+        self.interactive_mode = True if interactive_mode else False
+        self.psm_basic_auth = True if psm_basic_auth else False
+
+        if not psm_basic_auth and not psm_config_path:
+            logging.error ("Must set either psm_config_path or psm_basic_auth")
+            sys.exit(1)
+        elif psm_basic_auth:
+            self.username = os.environ['PSM_USER'] if 'PSM_USER' in os.environ else username
+            self.password = os.environ['PSM_PASSWORD'] if 'PSM_PASSWORD' in os.environ else password
+            if "https://" in host:
+                self._base_path = host
+            else:
+                self._base_path = "https://" + host
+            if not (self.username and self.password):
+                logging.error("Username/Password not set")
+                sys.exit(1)
             self.login()
+        elif not psm_basic_auth and psm_config_path:
+            self.psm_config_path = psm_config_path
+            if not os.path.exists(psm_config_path) and not self.interactive_mode:
+                logging.error("No config file; interactive_mode not set")
+                sys.exit(1)
+            self.psm_config = get_psm_config()
+            if "psm-ip" not in self.psm_config:
+                logging.error("'psm-ip' not set in PSM config file.")
+                if self.interactive_mode:
+                    self.psm_config = update_psm_config(this.psm_config)
+                else:
+                    logging.error("interactive_mode needed to set IP, but not set")
+                    sys.exit(1)
+            self.debugMode = False
+            if ("debug" in self.psm_config and self.psm_config["debug"] == "true") or debugMode:
+                logging.basicConfig(format='%(levelname)s: %(msg)s', level=logging.DEBUG)
+            host = "https://" + self.psm_config["psm-ip"]
+            self._base_path = self.psm_config["psm-ip"] if host is None else host
+            if "token" in self.psm_config:
+                self.cookie = self.psm_config["token"]
+                # Nothing else needed
+            elif self.username and self.password:
+                self.login()
+            elif self.interactive_mode:
+                self.username = input("Username: ")
+                self.password = getpass.getpass()
+                self.login()
+            else:
+                logging.error("No token and Username/Password not set")
+                sys.exit(1)
 
         """Default Base url
         """
@@ -670,25 +710,15 @@ conf = {{{packageName}}}.Configuration(
     
     def login(self):
         loginpath = self._base_path+"/v1/login"
-        creds_not_set = 'PSM_USER' not in os.environ or 'PSM_PASSWORD' not in os.environ
-        if creds_not_set:
-            if self.interactive_mode:
-                username = input("Username: ")
-                password = getpass.getpass()
-            else:
-                logging.error("PSM_USER and PSM_PASSWORD not set in environment variables.")
-                sys.exit(1)
-        else:
-            username = os.environ['PSM_USER']
-            password = os.environ['PSM_PASSWORD']
-
-        data = {'username': username, 'password': password, 'tenant': 'default'}
+        data = {'username': self.username,
+                'password': self.password,
+                'tenant': 'default'}
         response = requests.post(loginpath, data=json.dumps(data), verify=False)
         response.raise_for_status()
         resp_cookie = response.cookies.items()[0]
         cookie = resp_cookie[0] + "=" + resp_cookie[1]
         self.cookie = cookie
-        psm_config = get_psm_config()
-        psm_config["token"] = self.cookie
-        write_psm_config(self.psm_config_path, psm_config)
-        return cookie
+        if not self.psm_basic_auth:
+            psm_config = get_psm_config()
+            psm_config["token"] = self.cookie
+            write_psm_config(self.psm_config_path, psm_config)
