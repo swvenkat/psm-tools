@@ -78,7 +78,7 @@ EOF
 cat <<EOF > ${destdir}/${src_dirname}/setup.cfg
 [metadata]
 name = pensando_${1}
-version = 0.0.2
+version = ${version}
 author = Jeff Silberman
 author_email = jeff@pensando.io
 description = Python language bindings for Pensando ${1}
@@ -119,6 +119,15 @@ echo $1 | egrep 'cloud|dss|ent' > /dev/null || usage
 pipeline=$1
 src_dirname=src_${1}
 destdir=$2
+
+PSM_IP=`cat ~/.psm/config.json | jq '."psm-ip"' | sed -e 's/"//g'` 
+echo -n "User: "
+read USER
+echo -n "Password: "
+read -s PASSWORD
+echo
+
+version=`python3 getversion.py $PSM_IP $USER $PASSWORD`
 
 mkgenconfig $pipeline 
 mkgensh $pipeline
