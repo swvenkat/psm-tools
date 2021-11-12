@@ -1,0 +1,19 @@
+type {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{group}}{{operationId}}Request struct {
+	ctx _context.Context{{#generateInterfaces}}
+	ApiService {{classname}}
+{{/generateInterfaces}}{{^generateInterfaces}}
+	ApiService *{{classname}}Service
+{{/generateInterfaces}}
+{{#allParams}}
+	{{paramName}} {{^isPathParam}}*{{/isPathParam}}{{{dataType}}}
+{{/allParams}}
+}
+{{#allParams}}{{^isPathParam}}
+func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{group}}{{operationId}}Request) {{vendorExtensions.x-export-param-name}}({{paramName}} {{{dataType}}}) {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{group}}{{operationId}}Request {
+	r.{{paramName}} = &{{paramName}}
+	return r
+}{{/isPathParam}}{{/allParams}}
+
+func (r {{#structPrefix}}{{&classname}}{{/structPrefix}}Api{{group}}{{operationId}}Request) Execute() ({{#returnType}}{{{.}}}, {{/returnType}}*_nethttp.Response, error) {
+	return r.ApiService.{{nickname}}Execute(r)
+}
