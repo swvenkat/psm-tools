@@ -15,7 +15,11 @@ $(eval $(ALL_ARGS):;@:)
 .PHONY: $(ALL_ARGS)
 
 gen:
-	cd $(word 1, $(LANG)) && $(MAKE) $(LANG_ARGS)
+	@if [ $(words $(MAKECMDGOALS)) = 3 ]; then\
+		cd $(word 1, $(LANG)) && $(MAKE) $(LANG_ARGS);\
+	else\
+		echo "Usage: make gen [python|go] [cloud|dss|ent]";\
+	fi
 
 default:
 	$(eval TGTS := $(addprefix pypi_,$(DISTRIBUTIONS)))

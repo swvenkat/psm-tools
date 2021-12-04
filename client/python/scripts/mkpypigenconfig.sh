@@ -54,7 +54,7 @@ do
   group=\`basename \${file} | sed -e 's/.json//'\`
   dir=\`cat genconfig_${1}.json | jq .libName | tr -d "\""\`
 
-  java -jar bin/openapi-generator-cli.jar generate -i "\$file" -p group=\$group -c genconfig_${1}.json -o ${dirname}/
+  java -jar ../bin/openapi-generator-cli.jar generate -i "\$file" -p group=\$group -c genconfig_${1}.json -o ${dirname}/
 
   echo "\$group"
 done
@@ -118,7 +118,7 @@ EOF
 echo $1 | egrep 'cloud|dss|ent' > /dev/null || usage
 pipeline=$1
 src_dirname=src_${1}
-destdir=$2
+destdir=$2/generated
 
 PSM_IP=`cat ~/.psm/config.json | jq '."psm-ip"' | sed -e 's/"//g'` 
 echo -n "User: "
