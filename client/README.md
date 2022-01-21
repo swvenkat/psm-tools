@@ -20,14 +20,20 @@ root@6de26ac2cb83:/client# make gen python ent
 root@6de26ac2cb83:/client# make gen go ent
 ```
 
-#### 3. After python client bindings are generated, installed the module by running this command:
+#### 3. Install python module
 ```
 cd python/generated/src_ent && pip3 install . && cd ../..
 ```
 
-#### 4. Run python client apps to confirm all is good
+#### 4. Run client apps to confirm all is good
 ```
+# for python 
+cd /client/python
 ./examples/cluster_ping.py
+
+# for golang
+cd /client/go/examples
+go run cluster_ping.go
 ```
 
 ## Advanced operations
