@@ -22,7 +22,6 @@ echo "[$allgroups]"
 }
 
 function mkgenconfig() {
-[ ! -d $src_dirname ] && echo "Creating $src_dirname ..."; mkdir $src_dirname
 
 echo Creating genconfig_$1.json ...
 cat <<EOF > genconfig_$1.json
@@ -95,6 +94,9 @@ classifiers =
 [options]
 install_requires =
     nulltype
+    urllib3
+    requests
+    python-dateutil
 package_dir =
     = .
 packages = find:
@@ -127,10 +129,11 @@ echo -n "Password: "
 read -s PASSWORD
 echo
 
-version=`python3 getversion.py $PSM_IP $USER $PASSWORD`
+version=`python3 scripts/getversion.py $PSM_IP $USER $PASSWORD`
 
 mkgenconfig $pipeline 
 mkgensh $pipeline
 mkpypimeta $pipeline 
 
 exit 0
+

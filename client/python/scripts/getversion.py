@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 
 import requests
-from pprint import pprint
-from login import *
-import getpass
 import json
 import sys
 import warnings
